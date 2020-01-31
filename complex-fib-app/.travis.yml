@@ -1,0 +1,26 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t rahul/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run rahul/react-test npm test --coverage
+
+after_success:
+  - docker build -t rahul/multi-client ./client
+  - docker build -t rahul/multi-ngnix ./nginx
+  - docker build -t rahul/multi-server ./server
+  - docker build -t rahul/multi-worker ./worker
+# command to login to docker cli
+# - command
+
+# take those image and publish to docker hub
+  - docker push rahul/multi-client
+  - docker push rahul/multi-ngnix
+  - docker push rahul/multi-server
+  - docker push rahul/multi-worker
+
+
+  
+
